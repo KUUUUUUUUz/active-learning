@@ -1,0 +1,17 @@
+name: haiku-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10  # Ensure this version is compatible with TensorFlow
+  - pip
+  - numpy
+  - jupyter  # if you need Jupyter notebooks
+  - tensorflow==2.7
+  - matplotlib
+  - seaborn
+  - pip:
+      - dm-haiku
+      - jax
+      - jaxlib
+      - optax
+      - tensorflow-datasets

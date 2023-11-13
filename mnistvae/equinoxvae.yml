@@ -1,0 +1,20 @@
+name: equinoxvae
+channels:
+- conda-forge
+dependencies:
+- python==3.10
+- pyyaml
+- matplotlib
+- seaborn
+- tqdm
+- pytest
+- pip
+- ipywidgets
+- pip:
+  #- -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+  #- jax[cuda12_pip]==0.4.13 # fix for XLA errors with distrax...
+  - jax
+  - numpy
+  - distrax
+  - equinox
+  - optax
