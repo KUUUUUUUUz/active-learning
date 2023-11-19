@@ -7,8 +7,6 @@ from jax import random
 
 latent_size = 2
 
-
-
 def sample_a_image(Nz, Nx,image_vae, image, rng) -> jnp.ndarray:
     model_output: ImageVAEOutput = image_vae(image, key=rng)
 
@@ -21,7 +19,7 @@ def sample_a_image(Nz, Nx,image_vae, image, rng) -> jnp.ndarray:
         output = observation_distribution.sample(seed=rng, sample_shape=(Nx,))
         #print(output.shape)
         output_images.append(output)
-    #print output_images.shape
+    #print output_images.shapex
     output_images = jnp.concatenate(output_images, axis=0)
     return jnp.var(output_images, axis =0) 
 
@@ -51,9 +49,31 @@ def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarra
 
     # Element-wise multiplication to zero out unobserved pixels
     new_images = images * mask_observed
-
+   
     return new_images
 
+
+# def update_pixel(image, mask, i, j):
+#     # Function to be executed if the condition is True
+#     def true_fun(_):
+#         return image.at[i, j].set(0)
+
+#     # Function to be executed if the condition is False
+#     def false_fun(_):
+#         return image
+
+#     # Conditional update using jax.lax.cond
+#     return jax.lax.cond(mask[i, j], true_fun, false_fun, None)
+
+# def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
+#     for i in range(images.shape[0]):
+#         for j in range(images.shape[1]):
+#             # Use jax.lax.cond for conditional update
+#             images = update_pixel(images, mask_observed, i, j)
+#     return images
+
+
+#def remove_half()
 
 def random_get_next(mask_observed, images, original, rng_key):
     # Find indices of unobserved pixels
