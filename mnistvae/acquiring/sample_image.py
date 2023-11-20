@@ -7,12 +7,12 @@ from jax import random
 
 latent_size = 2
 
-def sample_a_image(Nz, Nx,image_vae, image, rng) -> jnp.ndarray:
-    model_output: ImageVAEOutput = image_vae(image, key=rng)
-
+def sample_a_image(Nz, Nx,model_output, image_vae, rng) -> jnp.ndarray:
+    #model_output: ImageVAEOutput = image_vae(image, key=rng)
     sampled_z_points = model_output["latent_distribution"].sample(seed=rng, sample_shape=(Nz,))
-    #print(sampled_z_points.shape)
+
     output_images = []
+
     for i in range(Nz):
         observation_distribution = image_vae.decode(sampled_z_points[i])
         #print(observation_distribution.shape)
@@ -20,7 +20,9 @@ def sample_a_image(Nz, Nx,image_vae, image, rng) -> jnp.ndarray:
         #print(output.shape)
         output_images.append(output)
     #print output_images.shapex
+
     output_images = jnp.concatenate(output_images, axis=0)
+
     return jnp.var(output_images, axis =0) 
 
 

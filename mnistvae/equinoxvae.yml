@@ -13,8 +13,8 @@ dependencies:
 - ipywidgets
 - pip:
   - -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-  #- jax[cuda12_pip]==0.4.13 # fix for XLA errors with distrax...
-  - jax == 0.4.13
+  - jax[cuda12_pip]==0.4.13 # fix for XLA errors with distrax...
+  #- jax == 0.4.13
   - jaxlib==0.4.13
   - numpy
   - distrax
