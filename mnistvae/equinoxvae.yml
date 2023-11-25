@@ -7,10 +7,14 @@ dependencies:
 - matplotlib
 - seaborn
 - tqdm
-- tensorflow==2.7
+- tensorflow==2.14
 - pytest
 - pip
 - ipywidgets
+- pytorch
+- torchvision
+- torchaudio
+#- cudatoolkit=11.3  
 - pip:
   - -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
   - jax[cuda12_pip]==0.4.13 # fix for XLA errors with distrax...
