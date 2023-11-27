@@ -46,7 +46,7 @@ def get_next(R, mask_observed, images, original)-> jnp.ndarray:
 
 
 def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
-    # Ensure that mask_observed is a boolean array
+
     mask_observed = mask_observed.astype(bool)
 
     # Element-wise multiplication to zero out unobserved pixels
@@ -54,26 +54,16 @@ def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarra
    
     return new_images
 
-
-# def update_pixel(image, mask, i, j):
-#     # Function to be executed if the condition is True
-#     def true_fun(_):
-#         return image.at[i, j].set(0)
-
-#     # Function to be executed if the condition is False
-#     def false_fun(_):
-#         return image
-
-#     # Conditional update using jax.lax.cond
-#     return jax.lax.cond(mask[i, j], true_fun, false_fun, None)
-
 # def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
-#     for i in range(images.shape[0]):
-#         for j in range(images.shape[1]):
-#             # Use jax.lax.cond for conditional update
-#             images = update_pixel(images, mask_observed, i, j)
-#     return images
+#     mask_observed = mask_observed.astype(bool)
 
+#     # Create a new array to hold the updated images
+#     new_images = images.copy()
+
+#     # Set unobserved pixels to a specific value (e.g., 0 or False)
+#     new_images = new_images.at[~mask_observed].set(0)  # Setting unobserved pixels to 0
+
+#     return new_images
 
 #def remove_half()
 
@@ -83,6 +73,7 @@ def random_get_next(mask_observed, images, original, rng_key):
 
     # Check if there are any unobserved indices
     if unobserved_indices[0].size == 0:
+
         return images, mask_observed  # Return the inputs unchanged if all pixels are observed
 
     # Randomly choose one index from unobserved indices
