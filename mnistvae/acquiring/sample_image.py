@@ -4,6 +4,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 from jax import random
+#from random_baseline import random_get_next
 
 latent_size = 2
 
@@ -25,24 +26,25 @@ def sample_a_image(Nz, Nx,model_output, image_vae, rng) -> jnp.ndarray:
 
     return jnp.var(output_images, axis =0) 
 
-
+"""ORIGINAL = reconsturced picture """
 
 def get_next(R, mask_observed, images, original)-> jnp.ndarray:
     mask_missing = ~mask_observed
     R_masked = R * mask_missing.astype(R.dtype)
     i = jnp.argmax(R_masked)
+
     i_2d = jnp.unravel_index(i, (32, 32))
     i = (i_2d[0], i_2d[1])
-    
+
     mask_observed = mask_observed.at[i].set(True)
 
     new_pixel_value = original[i]
     images_updated= images.at[i].set(new_pixel_value)
-    is_true = images_updated[i]
+
     #print(f"The value at index {i} is: {is_true}")
     #print(np.sum(mask_observed))
     #return new images that reveal our new pixels
-    return images_updated, mask_observed 
+    return images_updated, mask_observed, jnp.array(i)  
 
 
 def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
@@ -54,38 +56,6 @@ def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarra
    
     return new_images
 
-# def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
-#     mask_observed = mask_observed.astype(bool)
-
-#     # Create a new array to hold the updated images
-#     new_images = images.copy()
-
-#     # Set unobserved pixels to a specific value (e.g., 0 or False)
-#     new_images = new_images.at[~mask_observed].set(0)  # Setting unobserved pixels to 0
-
-#     return new_images
-
-#def remove_half()
-
-def random_get_next(mask_observed, images, original, rng_key):
-    # Find indices of unobserved pixels
-    unobserved_indices = jnp.where(~mask_observed)
-
-    # Check if there are any unobserved indices
-    if unobserved_indices[0].size == 0:
-
-        return images, mask_observed  # Return the inputs unchanged if all pixels are observed
-
-    # Randomly choose one index from unobserved indices
-    random_idx = random.choice(rng_key, unobserved_indices[0].shape[0], shape=())
-    i = (unobserved_indices[0][random_idx], unobserved_indices[1][random_idx])
-
-    # Update the mask and images with the original pixel value
-    mask_observed = mask_observed.at[i].set(True)
-    new_pixel_value = original[i]
-    images_updated = images.at[i].set(new_pixel_value)
-
-    return images_updated, mask_observed
 
 def binary_cross_entropy(x: jnp.ndarray, logits: jnp.ndarray) -> jnp.ndarray:
     """Calculate binary (logistic) cross-entropy from distribution logits.
