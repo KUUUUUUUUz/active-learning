@@ -41,10 +41,7 @@ def get_next(R, mask_observed, images, original)-> jnp.ndarray:
     new_pixel_value = original[i]
     images_updated= images.at[i].set(new_pixel_value)
 
-    #print(f"The value at index {i} is: {is_true}")
-    #print(np.sum(mask_observed))
-    #return new images that reveal our new pixels
-    return images_updated, mask_observed, jnp.array(i)  
+    return images_updated, mask_observed
 
 
 def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarray:
@@ -53,7 +50,6 @@ def update_images(images: jnp.ndarray, mask_observed: jnp.ndarray) -> jnp.ndarra
 
     # Element-wise multiplication to zero out unobserved pixels
     new_images = images * mask_observed
-   
     return new_images
 
 
