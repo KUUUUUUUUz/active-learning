@@ -29,13 +29,13 @@ def sample_a_image(Nz, Nx,model_output, image_vae, rng) -> jnp.ndarray:
 """ORIGINAL = reconsturced picture """
 
 def get_next(R, mask_observed, images, original)-> jnp.ndarray:
-    mask_missing = ~mask_observed
-    R_masked = R * mask_missing.astype(R.dtype)
-    i = jnp.argmax(R_masked)
 
+    mask_missing = ~mask_observed
+    R_masked = jnp.where(mask_missing, R, -jnp.inf)
+
+    i = jnp.argmax(R_masked)
     i_2d = jnp.unravel_index(i, (32, 32))
     i = (i_2d[0], i_2d[1])
-
     mask_observed = mask_observed.at[i].set(True)
 
     new_pixel_value = original[i]
