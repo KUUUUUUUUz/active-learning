@@ -26,7 +26,6 @@ def sample_a_image(Nz, Nx,model_output, image_vae, rng) -> jnp.ndarray:
 
     return jnp.var(output_images, axis =0) 
 
-"""ORIGINAL = reconsturced picture """
 
 def get_next(R, mask_observed, images, original)-> jnp.ndarray:
 
@@ -63,15 +62,11 @@ def binary_cross_entropy(x: jnp.ndarray, logits: jnp.ndarray) -> jnp.ndarray:
     Returns:
         A scalar representing binary CE for the given Bernoulli distribution.
     """
-   # print("x shape is:", x[0])
     if x.shape != logits.shape:
         raise ValueError("inputs x and logits must be of the same shape")
     x = jnp.reshape(x, (x.shape[0], -1))
-    #print("x reshape ? is:", x[0])
     logits = jnp.reshape(logits, (logits.shape[0], -1))
-   # print("logits is:", logits)
     return -jnp.sum(x * logits - jnp.logaddexp(0.0, logits), axis=-1)
-    #return -jnp.sum(jnp.logaddexp(0., jnp.where(x, -1., 1.) * logits), axis=(1,2,3))
 
 
 
