@@ -29,5 +29,5 @@ def random_get_next(mask_observed, images, original, rng_key):
     mask_observed = mask_observed.at[i].set(True)
     new_pixel_value = original[i]
     images_updated = images.at[i].set(new_pixel_value)
-
-    return images_updated, mask_observed, jnp.array(i)
+    return images_updated, mask_observed
+    #return images_updated, mask_observed, jnp.array(i)
