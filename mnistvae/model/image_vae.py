@@ -32,8 +32,8 @@ class ImageVAE(eqx.Module):
 
     def __init__(self, in_channels: int, n_latents: int = 2, *, key):
         latent_dist_params = 2  # Normal
-        n_obs_dist_params = 1  # Bernoulli
-
+        #n_obs_dist_params = 1  # Bernoulli
+        n_obs_dist_params = 2  # Now we have a normal
         encoder_output_channels = n_latents * latent_dist_params
         self.encoder = ImageEncoder(
             in_channels=in_channels, out_channels=encoder_output_channels, key=key
@@ -49,8 +49,13 @@ class ImageVAE(eqx.Module):
 
     def decode(self, latents: jnp.ndarray) -> dsx.Distribution:
         decoder_output = self.decoder(latents)
-        return dsx.Bernoulli(logits=decoder_output)
 
+        loc, log_scale = jnp.split(decoder_output, 2)
+        scale = jax.nn.softplus(log_scale)
+        scale = jnp.clip(scale, a_min=1e-5, a_max=None)
+        #print(f"loc shape: {loc.shape}, scale shape: {scale.shape}")  
+        return dsx.Normal(loc, scale)
+    
     def __call__(
         self, image: jnp.ndarray, *, key=jax.random.PRNGKey
     ) -> dsx.Distribution:
